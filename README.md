@@ -1,24 +1,44 @@
 # Reditor
 
-TODO: Write a gem description
+Reditor provides `reditor` command.
+
+This command detect and open a library from $LOAD_PATH or rubygems.
+
+reditor requires the EDITOR variable.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'reditor'
+```ruby
+  gem 'reditor'
+```
 
 And then execute:
 
-    $ bundle
+```
+  $ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install reditor
+```
+  $ gem install reditor
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Open Standard Library
+
+```
+  $ reditor set
+```
+
+### Open a gem
+
+```
+  $ reditor mechanize
+```
 
 ## Contributing
 
