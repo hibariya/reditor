@@ -6,7 +6,12 @@ module Reditor
   class Command < Thor
     include Reditor
 
-    desc :open, 'open a library'
+    map '-v' => :version,
+        '-h' => :help,
+        '--version' => :version,
+        '--help'    => :help
+
+    desc :open, 'Open the library'
     def open(name)
       dir, file = *detect(name)
 
@@ -20,7 +25,16 @@ module Reditor
       say e.message, :red
     end
 
-    desc :version, 'show version'
+    desc :sh, 'Open a shell and move to the library'
+    def sh(name)
+      dir, _ = *detect(name)
+
+      Dir.chdir dir do
+        exec shell_command
+      end
+    end
+
+    desc :version, 'Show version'
     def version
       say "Reditor version #{VERSION}"
     end
@@ -33,7 +47,11 @@ module Reditor
     private
 
     def editor_command
-      ENV['EDITOR']
+      ENV['EDITOR'] or raise '$EDITOR is not provided.'
+    end
+
+    def shell_command
+      ENV['SHELL'] or raise '$SHELL is not provided.'
     end
   end
 end
