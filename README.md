@@ -40,6 +40,12 @@ Or install it yourself as:
   $ reditor mechanize
 ```
 
+### Open a shell and move to the library.
+
+```
+  $ reditor sh mechanize
+```
+
 ## Contributing
 
 1. Fork it
