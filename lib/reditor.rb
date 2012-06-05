@@ -1,6 +1,20 @@
 require 'pathname'
 require 'rubygems'
 
+def gemfile_found?
+  if File.exists? 'Gemfile'
+    true
+  elsif (Dir.getwd != '/')
+    Dir.chdir('..')
+    gemfile_found?
+  end
+end
+
+if (gemfile_found?)
+  require 'bundler'
+  Bundler.setup
+end
+
 module Reditor
   class LibraryNotFound < LoadError; end
 
