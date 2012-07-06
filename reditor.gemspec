@@ -15,6 +15,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.version       = Reditor::VERSION
 
-  gem.add_runtime_dependency 'thor',    '>= 0.14.6'
-  gem.add_runtime_dependency 'bundler', '>= 1.1.4'
+  gem.add_runtime_dependency 'thor', '>= 0.15.4'
+
+  gem.add_development_dependency 'tapp',  '>= 1.3.1'
+  gem.add_development_dependency 'rspec', '>= 2.10.0'
 end

@@ -4,8 +4,6 @@ require 'thor'
 
 module Reditor
   class Command < Thor
-    include Reditor
-
     map '-v' => :version,
         '-h' => :help,
         '--version' => :version,
@@ -13,24 +11,22 @@ module Reditor
 
     desc :open, 'Open the library'
     def open(name)
-      dir, file = *detect(name)
+      detect_exec name do |dir, file|
+        say "Moving to #{dir}", :green
+        Dir.chdir dir do
+          say "Opening #{file}", :green
 
-      say "Moving to #{dir}", :green
-      Dir.chdir dir do
-        say "Opening #{file}", :green
-
-        exec editor_command, file
+          exec editor_command, file
+        end
       end
-    rescue LibraryNotFound => e
-      say e.message, :red
     end
 
     desc :sh, 'Open a shell and move to the library'
     def sh(name)
-      dir, _ = *detect(name)
-
-      Dir.chdir dir do
-        exec shell_command
+      detect_exec name do |dir, _|
+        Dir.chdir dir do
+          exec shell_command
+        end
       end
     end
 
@@ -45,6 +41,12 @@ module Reditor
     end
 
     private
+
+    def detect_exec(name, &block)
+      block.call *LibraryLocator.detect(name)
+    rescue LibraryNotFound => e
+      say e.message, :red
+    end
 
     def editor_command
       ENV['EDITOR'] or raise '$EDITOR is not provided.'
