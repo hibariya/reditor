@@ -28,7 +28,7 @@ Or install it yourself as:
 
 ## Usage
 
-### Open Standard Library
+### Open Standard Library (pure ruby only)
 
 ```
   $ reditor set
