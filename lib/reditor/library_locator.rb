@@ -1,5 +1,4 @@
 require 'pathname'
-require 'bundler'
 
 # TODO: care multi candidates
 # TODO: care version specification
