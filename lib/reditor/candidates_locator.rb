@@ -32,7 +32,7 @@ module Reditor
         pathname = Pathname.new(File.expand_path(path))
 
         pathname.entries.select {|entry|
-          entry.to_path =~ pattern
+          entry.extname == '.rb' && entry.to_path =~ pattern
         }.map {|entry| entry.basename('.*').to_path }
       }.flatten
     end
