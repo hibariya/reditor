@@ -23,7 +23,8 @@ module Reditor
 
     def detect_from_bundler
       Bundler.load.specs.select {|spec| spec.name =~ pattern }.map(&:name)
-    rescue NameError # ensure enviroments that bundler isn't installed
+    rescue NameError, Bundler::GemfileNotFound
+      []
     end
 
     def detect_from_loadpath
