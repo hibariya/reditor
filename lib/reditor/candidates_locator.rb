@@ -11,9 +11,7 @@ module Reditor
 
     def initialize(keyword)
       tokens = keyword.split(/[_\-]/).map {|keyword|
-        keyword.length > 3 ?
-          keyword[0...-2]  :
-          keyword
+        keyword.length > 4 ? keyword[0...-3] : keyword
       }
 
       @pattern = /#{tokens.map {|t| Regexp.quote(t) }.join('|')}/i
