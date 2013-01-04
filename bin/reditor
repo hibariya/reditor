@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-
 require 'reditor'
 
 $PROGRAM_NAME = File.basename(__FILE__)
