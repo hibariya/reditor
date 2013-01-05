@@ -23,7 +23,7 @@ module Reditor
 
     def detect_from_bundler
       Bundler.load.specs.select {|spec| spec.name =~ pattern }.map(&:name)
-    rescue NameError, Bundler::GemfileNotFound
+    rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound
       []
     end
 
