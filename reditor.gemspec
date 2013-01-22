@@ -19,4 +19,5 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'tapp',  '>= 1.3.1'
   gem.add_development_dependency 'rspec', '>= 2.10.0'
+  gem.add_development_dependency 'rake'
 end
