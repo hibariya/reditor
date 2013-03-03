@@ -1,5 +1,4 @@
 require 'pathname'
-require 'bundler'
 
 # TODO: care version specification
 module Reditor
@@ -19,11 +18,12 @@ module Reditor
     end
 
     def detect_from_bundler
+      require 'bundler'
+
       return nil unless spec = Bundler.load.specs.find {|spec| spec.name == name }
 
       Pathname.new(spec.full_gem_path)
-    rescue NameError # ensure enviroments that bundler isn't installed
-    rescue Bundler::GemNotFound, Bundler::GemfileNotFound
+    rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound
     end
 
     def detect_from_loadpath
@@ -41,7 +41,6 @@ module Reditor
 
       Pathname.new(spec.full_gem_path)
     rescue Gem::LoadError
-      nil
     end
   end
 end

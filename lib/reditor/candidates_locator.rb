@@ -1,5 +1,5 @@
 require 'pathname'
-require 'bundler'
+require 'hotwater'
 
 module Reditor
   class CandidatesLocator
@@ -7,38 +7,47 @@ module Reditor
       new(keyword.to_s).detect
     end
 
-    attr_reader :pattern
+    attr_reader :keyword, :limit
 
-    def initialize(keyword)
-      tokens = keyword.split(/[_\-]/).map {|keyword|
-        keyword.length > 4 ? keyword[0...-3] : keyword
-      }
-
-      @pattern = /#{tokens.map {|t| Regexp.quote(t) }.join('|')}/i
+    def initialize(keyword, limit = 10)
+      @keyword, @limit = keyword, limit
     end
 
     def detect
-      (detect_from_bundler + detect_from_loadpath + detect_from_gem).sort.uniq
+      available_libraries.sort_by {|name|
+        Hotwater.damerau_levenshtein_distance(@keyword, name)
+      }.take(@limit)
     end
 
-    def detect_from_bundler
-      Bundler.load.specs.select {|spec| spec.name =~ pattern }.map(&:name)
+    # XXX
+    def available_libraries
+      (availables_from_loadpath +
+       availables_from_gem      +
+       availables_from_bundler).uniq
+    end
+
+    private
+
+    def availables_from_bundler
+      require 'bundler'
+
+      Bundler.load.specs.map(&:name)
     rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound
       []
     end
 
-    def detect_from_loadpath
-      $LOAD_PATH.map {|path|
-        pathname = Pathname.new(File.expand_path(path))
-
-        pathname.entries.select {|entry|
-          entry.extname == '.rb' && entry.to_path =~ pattern
-        }.map {|entry| entry.basename('.*').to_path }
-      }.flatten
+    def availables_from_gem
+      Gem::Specification.map(&:name)
+    rescue Gem::LoadError
+      []
     end
 
-    def detect_from_gem
-      Gem::Specification.each.select {|spec| spec.name =~ pattern }.map(&:name)
+    def availables_from_loadpath
+      $LOAD_PATH.each_with_object([]) {|path, availables|
+        Pathname.new(File.expand_path(path)).entries.each do |entry|
+          availables << entry.basename('.rb').to_s if entry.extname == '.rb'
+        end
+      }
     end
   end
 end

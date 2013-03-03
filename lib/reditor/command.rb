@@ -56,23 +56,21 @@ module Reditor
         end
 
       block.call dir, file
-    rescue LibraryNotFound => e
-      warn e.message
     end
 
     def choose_exec(name, &block)
       candidates = CandidatesLocator.detect(name)
-
-      raise LibraryNotFound, "Library #{name} not found" if candidates.empty?
 
       candidates.each.with_index do |candidate, i|
         say "[#{i}] #{candidate}"
       end
       print "Choose number of library [0]> "
 
-      chosen = Integer($stdin.gets.strip) rescue 0
+      abort_reditor unless num = $stdin.gets
 
-      detect_exec candidates[chosen], &block
+      detect_exec candidates[num.to_i], &block
+    rescue Interrupt
+      abort_reditor
     end
 
     def editor_command
@@ -81,6 +79,12 @@ module Reditor
 
     def shell_command
       ENV['SHELL'] or raise '$SHELL is not provided.'
+    end
+
+    def abort_reditor
+      puts
+
+      exit
     end
   end
 end

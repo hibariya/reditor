@@ -24,10 +24,10 @@ describe 'reditor command' do
       it { should match /thread\.rb$/ }
     end
 
-    context 'Standard library in non-bundler broject (no library found)' do
-      subject { capture_reditor('3600645b1f28d73e9cd0384b5b9664d6ceeabe7e', where: 'blank_project') }
+    context 'Incorrect name library in non-bundler broject' do
+      subject { capture_reditor('cvs', where: 'blank_project') }
 
-      it { should match 'Library 3600645b1f28d73e9cd0384b5b9664d6ceeabe7e not found' }
+      it { should match /\[0\] csv/ }
     end
 
     context 'rubygems library in non-bundler project' do
