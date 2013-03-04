@@ -9,7 +9,7 @@ module Reditor
 
     attr_reader :keyword, :limit
 
-    def initialize(keyword, limit = 10)
+    def initialize(keyword, limit = 20)
       @keyword, @limit = keyword, limit
     end
 
