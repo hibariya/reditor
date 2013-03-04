@@ -19,7 +19,6 @@ module Reditor
       }.take(@limit)
     end
 
-    # XXX
     def available_libraries
       (availables_from_loadpath +
        availables_from_gem      +
