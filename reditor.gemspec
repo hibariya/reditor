@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'hotwater', '~> 0.1.2'
   gem.add_runtime_dependency 'thor',     '~> 0.17.0'
+  gem.add_runtime_dependency 'rake',     '~> 10.0.3' # workaround for `WARN: Unresolved specs during Gem::Specification.reset: rake (>= 0)' on ruby-2.0.0
 
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'rake'
