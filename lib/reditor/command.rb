@@ -36,9 +36,8 @@ module Reditor
       say "Reditor version #{VERSION}"
     end
 
-    # XXX FIXME: a more better implementation
     def method_missing(name, *args, &block)
-      send :open, name
+      open name
     end
 
     private
@@ -59,16 +58,16 @@ module Reditor
     end
 
     def choose_exec(name, &block)
-      candidates = CandidatesLocator.detect(name)
+      names = LibrarySearchQuery.search(name)
 
-      candidates.each.with_index do |candidate, i|
-        say "[#{i}] #{candidate}"
+      names.each.with_index do |name, i|
+        say "[#{i}] #{name}"
       end
-      print "Choose number of library [0]> "
+      print 'Choose number of library [0]> '
 
       abort_reditor unless num = $stdin.gets
 
-      detect_exec candidates[num.to_i], &block
+      detect_exec names[num.to_i], &block
     rescue Interrupt
       abort_reditor
     end

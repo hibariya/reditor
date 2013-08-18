@@ -7,15 +7,21 @@ describe 'reditor command' do
     command = PROJECT_ROOT.join('bin/reditor').to_path
     project = PROJECT_ROOT.join("spec/samples/#{options[:where]}").to_path
 
-    Open3.capture2e(
-      {'EDITOR' => options[:editor]},
-      command,
-      library_name,
-      chdir: project
-    ).first
+    Bundler.with_clean_env {
+      Open3.capture2e(
+        {'EDITOR' => options[:editor]},
+        command,
+        library_name,
+        chdir: project
+      ).first
+    }
   end
 
   let(:thor_in_bundler_project) { /thor-0\.14\.6/ }
+
+  before :all do
+    system 'bundle', chdir: PROJECT_ROOT.join('spec/samples/bundler_project').to_path
+  end
 
   describe '#open' do
     context 'Standard library in non-bundler broject (happy case)' do
