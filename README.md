@@ -1,4 +1,4 @@
-# Reditor
+# Reditor [![Build Status](https://travis-ci.org/hibariya/reditor.png?branch=master)](https://travis-ci.org/hibariya/reditor)
 
 Reditor provides `reditor` command.
 

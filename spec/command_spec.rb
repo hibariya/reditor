@@ -20,7 +20,9 @@ describe 'reditor command' do
   let(:thor_in_bundler_project) { /thor-0\.14\.6/ }
 
   before :all do
-    system 'bundle', chdir: PROJECT_ROOT.join('spec/samples/bundler_project').to_path
+    Bundler.with_clean_env do
+      system 'bundle', chdir: PROJECT_ROOT.join('spec/samples/bundler_project').to_path
+    end
   end
 
   describe '#open' do
