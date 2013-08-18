@@ -24,6 +24,7 @@ module Reditor
 
       Pathname.new(spec.full_gem_path)
     rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound
+      # NOP (probably it's not available bundler project)
     end
 
     def detect_from_loadpath
@@ -41,6 +42,7 @@ module Reditor
 
       Pathname.new(spec.full_gem_path)
     rescue Gem::LoadError
+      # NOP (Gem couldn't find #{name} gem)
     end
   end
 end
