@@ -1,5 +1,4 @@
 require 'pathname'
-require 'bundler'
 
 # TODO: care version specification
 module Reditor
@@ -19,6 +18,8 @@ module Reditor
     end
 
     def detect_from_bundler
+      require 'bundler'
+
       return nil unless spec = Bundler.load.specs.find {|spec| spec.name == name }
 
       Pathname(spec.full_gem_path)

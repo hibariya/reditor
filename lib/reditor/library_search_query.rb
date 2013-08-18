@@ -1,6 +1,5 @@
 require 'pathname'
 require 'hotwater'
-require 'bundler'
 
 module Reditor
   class LibrarySearchQuery
@@ -45,6 +44,8 @@ module Reditor
     end
 
     def availables_from_bundler
+      require 'bundler'
+
       Bundler.load.specs.map(&:name)
     rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound
       []
