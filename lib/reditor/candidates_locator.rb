@@ -1,5 +1,6 @@
 require 'pathname'
 require 'hotwater'
+require 'bundler'
 
 module Reditor
   class CandidatesLocator
@@ -28,8 +29,6 @@ module Reditor
     private
 
     def availables_from_bundler
-      require 'bundler'
-
       Bundler.load.specs.map(&:name)
     rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound
       []
@@ -43,7 +42,7 @@ module Reditor
 
     def availables_from_loadpath
       $LOAD_PATH.each_with_object([]) {|path, availables|
-        Pathname.new(File.expand_path(path)).entries.each do |entry|
+        Pathname(File.expand_path(path)).entries.each do |entry|
           availables << entry.basename('.rb').to_s if entry.extname == '.rb'
         end
       }
