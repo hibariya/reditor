@@ -3,6 +3,8 @@ require 'hotwater'
 
 module Reditor
   class LibrarySearchQuery
+    include BundlerSupport
+
     def self.search(query, limit = 20)
       new(query).search(limit)
     end
@@ -44,11 +46,7 @@ module Reditor
     end
 
     def availables_from_bundler
-      require 'bundler'
-
-      Bundler.load.specs.map(&:name)
-    rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound, Bundler::GitError
-      []
+      bundler_specs.map(&:name)
     end
 
     def availables_from_gem

@@ -3,6 +3,8 @@ require 'pathname'
 # TODO: care version specification
 module Reditor
   class LibraryLocator
+    include BundlerSupport
+
     def self.detect(name)
       new(name.to_s).detect
     end
@@ -18,13 +20,9 @@ module Reditor
     end
 
     def detect_from_bundler
-      require 'bundler'
-
-      return nil unless spec = Bundler.load.specs.find {|spec| spec.name == name }
+      return nil unless spec = bundler_specs.find {|spec| spec.name == name }
 
       Pathname(spec.full_gem_path)
-    rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound, Bundler::GitError
-      # NOP (probably it's not available bundler project)
     end
 
     def detect_from_loadpath
