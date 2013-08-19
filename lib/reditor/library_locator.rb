@@ -23,7 +23,7 @@ module Reditor
       return nil unless spec = Bundler.load.specs.find {|spec| spec.name == name }
 
       Pathname(spec.full_gem_path)
-    rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound
+    rescue NameError, Bundler::GemNotFound, Bundler::GemfileNotFound, Bundler::GitError
       # NOP (probably it's not available bundler project)
     end
 
