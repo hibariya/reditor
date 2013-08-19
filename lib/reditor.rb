@@ -1,5 +1,10 @@
 require 'rubygems'
 
+# load all dependencies (https://github.com/hibariya/reditor/issues/4)
+require 'hotwater'
+require 'thor'
+require 'rake'
+
 module Reditor
   class LibraryNotFound < LoadError; end
 
