@@ -7,6 +7,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Open a ruby library with your editor. Reditor supports gem, bundler, and stdlib (pure ruby).}
   gem.summary       = %q{Open a ruby library with your editor}
   gem.homepage      = 'https://github.com/hibariya/reditor'
+  gem.licenses      = ['MIT']
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
