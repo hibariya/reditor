@@ -27,9 +27,9 @@ describe 'reditor command' do
 
   describe '#open' do
     context 'Standard library in non-bundler broject (happy case)' do
-      subject { capture_reditor('thread', where: 'blank_project') }
+      subject { capture_reditor('webrick', where: 'blank_project') }
 
-      it { should match /thread\.rb$/ }
+      it { should match /webrick\.rb$/ }
     end
 
     context 'Incorrect name library in non-bundler broject' do
@@ -63,10 +63,11 @@ describe 'reditor command' do
     end
 
     context 'with incorrect name' do
-      subject { capture_reditor('thief') }
+      subject { capture_reditor('rb') }
 
-      it { should match /\[\d+\]\sthread/ }
-      it { should match /\[\d+\]\sthor/ }
+      it { should match /\[\d+\]\sirb$/ }
+      it { should match /\[\d+\]\serb$/ }
+      it { should match /\[\d+\]\sdrb$/ }
       it { should match /Choose number of library/ }
     end
   end
