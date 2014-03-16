@@ -35,9 +35,9 @@ reditor requires the EDITOR variable.
 ### Open a gem on bundler project
 
 Reditor opens a gem that specified in Gemfile by default.
-If you want to avoid it, pass the `--global' option.
+If you want to avoid it, pass the `--global` option.
 
-```ruby
+```
 $ gem list rack
 
 *** LOCAL GEMS ***
