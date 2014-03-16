@@ -50,12 +50,6 @@ module Reditor
 
     private
 
-    def method_missing(name, *args, &block)
-      return super if Command.restarted
-
-      Command.restart ['open', name, *args]
-    end
-
     def detect_exec(name, options = {}, &block)
       path = LibraryLocator.detect!(name, options)
 
@@ -109,6 +103,12 @@ module Reditor
       puts
 
       exit
+    end
+
+    def method_missing(name, *args, &block)
+      return super if Command.restarted
+
+      Command.restart ['open', name, *args]
     end
   end
 end
