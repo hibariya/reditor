@@ -110,7 +110,7 @@ module Reditor
     def method_missing(name, *args, &block)
       return super if Command.restarted
 
-      Command.restart ['open', name, *args]
+      Command.restart ['open', name.to_s, *args]
     end
   end
 end
