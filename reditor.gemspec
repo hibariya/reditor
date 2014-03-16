@@ -4,8 +4,8 @@ require File.expand_path('../lib/reditor/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ['hibariya']
   gem.email         = ['celluloid.key@gmail.com']
-  gem.description   = %q{Open a ruby library with your editor. Reditor supports gem, bundler, and stdlib (pure ruby).}
-  gem.summary       = %q{Open a ruby library with your editor}
+  gem.description   = %q{Open a ruby library with $EDITOR. Reditor supports rubygems, bundler, and stdlib (pure ruby).}
+  gem.summary       = %q{Open a ruby library with $EDITOR.}
   gem.homepage      = 'https://github.com/hibariya/reditor'
   gem.licenses      = ['MIT']
 
