@@ -5,14 +5,15 @@ module Reditor
   class LibraryLocator
     include BundlerSupport
 
-    def self.detect(name)
-      new(name.to_s).detect
+    def self.detect(name, options = {})
+      new(name.to_s, options).detect
     end
 
-    attr_reader :name
+    attr_reader :name, :options
 
-    def initialize(name)
-      @name  = name
+    def initialize(name, options)
+      @name    = name
+      @options = {global: false}.merge(options)
     end
 
     def detect
@@ -20,6 +21,7 @@ module Reditor
     end
 
     def detect_from_bundler
+      return nil if options[:global]
       return nil unless spec = bundler_specs.find {|spec| spec.name == name }
 
       Pathname(spec.full_gem_path)

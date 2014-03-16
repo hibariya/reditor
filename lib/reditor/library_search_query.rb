@@ -5,19 +5,23 @@ module Reditor
   class LibrarySearchQuery
     include BundlerSupport
 
-    def self.search(query, limit = 20)
-      new(query).search(limit)
+    def self.search(query, options = {})
+      new(query, options).search
     end
 
-    def initialize(query)
-      @query = query.to_s
+    attr_reader :query, :options
+    attr_reader :substr_pattern, :partial_pattern
 
-      quoted = Regexp.quote(@query)
+    def initialize(query, options = {})
+      @query   = query.to_s
+      @options = {limit: 20, global: false}.merge(options)
+
+      quoted = Regexp.quote(query)
       @substr_pattern  = /^#{quoted}|#{quoted}$/i
       @partial_pattern = /#{quoted}/i
     end
 
-    def search(limit)
+    def search(limit = options[:limit])
       available_libraries.sort_by {|name|
         indexes_with_match(name) + indexes_with_distance(name)
       }.take(limit)
@@ -35,17 +39,19 @@ module Reditor
 
     def indexes_with_match(name)
       words         = name.split(/-_/)
-      substr_count  = words.grep(@substr_pattern).count
-      partial_count = words.grep(@partial_pattern).count
+      substr_count  = words.grep(substr_pattern).count
+      partial_count = words.grep(partial_pattern).count
 
       [-substr_count, -partial_count]
     end
 
     def indexes_with_distance(name)
-      [Hotwater.damerau_levenshtein_distance(@query, name)]
+      [Hotwater.damerau_levenshtein_distance(query, name)]
     end
 
     def availables_from_bundler
+      return [] if options[:global]
+
       bundler_specs.map(&:name)
     end
 

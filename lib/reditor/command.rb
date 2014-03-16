@@ -4,14 +4,26 @@ require 'thor'
 
 module Reditor
   class Command < Thor
+    class << self
+      attr_accessor :restarted
+
+      def restart(args)
+        self.restarted = true
+
+        start args
+      end
+    end
+
     map '-v' => :version,
         '-h' => :help,
         '--version' => :version,
         '--help'    => :help
 
+    class_options global: false, desc: 'Detect global libraries only'
+
     desc :open, 'Open the library'
     def open(name)
-      detect_exec name do |dir, file|
+      detect_exec name, global: options[:global] do |dir, file|
         say "Moving to #{dir}", :green
         Dir.chdir dir do
           say "Opening #{file}", :green
@@ -23,7 +35,7 @@ module Reditor
 
     desc :sh, 'Open a shell and move to the library'
     def sh(name)
-      detect_exec name do |dir, _|
+      detect_exec name, global: options[:global] do |dir, _|
         say "Moving to #{dir}", :green
         Dir.chdir dir do
           exec shell_command
@@ -36,16 +48,18 @@ module Reditor
       say "Reditor version #{VERSION}"
     end
 
-    def method_missing(name, *args, &block)
-      open name
-    end
-
     private
 
-    def detect_exec(name, &block)
-      path = LibraryLocator.detect(name)
+    def method_missing(name, *args, &block)
+      super if Command.restarted
 
-      return choose_exec name, &block unless path
+      Command.restart ['open', name.to_s, *args]
+    end
+
+    def detect_exec(name, options = {}, &block)
+      path = LibraryLocator.detect(name, options)
+
+      return choose_exec name, options, &block unless path
 
       dir, file =
         if path.file?
@@ -57,8 +71,8 @@ module Reditor
       block.call dir, file
     end
 
-    def choose_exec(name, &block)
-      names = LibrarySearchQuery.search(name)
+    def choose_exec(name, options = {}, &block)
+      names = LibrarySearchQuery.search(name, options)
 
       names.each.with_index do |name, i|
         say "[#{i}] #{name}"
@@ -67,7 +81,7 @@ module Reditor
 
       abort_reditor unless num = $stdin.gets
 
-      detect_exec names[num.to_i], &block
+      detect_exec names[num.to_i], options, &block
     rescue Interrupt
       abort_reditor
     end

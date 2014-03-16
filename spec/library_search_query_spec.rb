@@ -19,31 +19,31 @@ describe Reditor::LibrarySearchQuery do
     end
 
     describe 'rails' do
-      subject { Reditor::LibrarySearchQuery.search('rails', 3) }
+      subject { Reditor::LibrarySearchQuery.search('rails', limit: 3) }
 
       it { should == %w(rails_admin jquery-atwho-rails railtie) }
     end
 
     describe 'rails_' do
-      subject { Reditor::LibrarySearchQuery.search('rails_', 2) }
+      subject { Reditor::LibrarySearchQuery.search('rails_', limit: 2) }
 
       it { should == %w(rails_admin railtie) }
     end
 
     describe 'cvs' do
-      subject { Reditor::LibrarySearchQuery.search('cvs', 1) }
+      subject { Reditor::LibrarySearchQuery.search('cvs', limit: 1) }
 
       it { should == %w(csv) }
     end
 
     describe 'atwho' do
-      subject { Reditor::LibrarySearchQuery.search('atwho', 2) }
+      subject { Reditor::LibrarySearchQuery.search('atwho', limit: 2) }
 
       it { should == %w(jquery-atwho-rails itwho) }
     end
 
     describe 'active' do
-      subject { Reditor::LibrarySearchQuery.search('active', 3) }
+      subject { Reditor::LibrarySearchQuery.search('active', limit: 3) }
 
       it { should == %w(activemodel active_decorator action) }
     end
