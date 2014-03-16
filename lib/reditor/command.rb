@@ -19,6 +19,8 @@ module Reditor
         '--version' => :version,
         '--help'    => :help
 
+    default_command :open
+
     desc 'open [NAME]', 'Detect and open a library'
     method_options global: false
     def open(name)
