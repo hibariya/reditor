@@ -23,7 +23,9 @@ module Reditor
 
     desc 'open [NAME]', 'Detect and open a library'
     method_options global: false
-    def open(name)
+    def open(name = nil)
+      return invoke(:help) unless name
+
       detect_exec name, global: options[:global] do |dir, file|
         say "Moving to #{dir}", :green
         Dir.chdir dir do
