@@ -8,27 +8,13 @@ reditor requires the EDITOR variable.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-  gem 'reditor'
-```
-
-And then execute:
-
-```
-  $ bundle
-```
-
-Or install it yourself as:
-
 ```
   $ gem install reditor
 ```
 
 ## Usage
 
-### Open Standard Library (pure ruby only)
+### Open a Standard Library (pure ruby only)
 
 ```
   $ reditor set
@@ -37,13 +23,32 @@ Or install it yourself as:
 ### Open a gem
 
 ```
-  $ reditor mechanize
+  $ reditor railties
 ```
 
-### Open a shell and move to the library.
+### Open a library with shell
 
 ```
-  $ reditor sh mechanize
+  $ reditor sh railties
+```
+
+### Open a gem on bundler project
+
+Reditor opens a gem that specified in Gemfile by default.
+If you want to avoid it, pass the `--global' option.
+
+```ruby
+$ gem list rack
+
+*** LOCAL GEMS ***
+
+rack (1.5.2, 1.4.5)
+
+$ bundle list rack
+/(snip)/rack-1.4.5
+
+$ reditor rack          # open rack-1.4.5
+$ reditor rack --global # open rack-1.5.2
 ```
 
 ## Contributing
