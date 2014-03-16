@@ -3,11 +3,17 @@ require 'pathname'
 # TODO: care version specification
 module Reditor
   class LibraryLocator
-    include BundlerSupport
+    class << self
+      def detect(name, options = {})
+        new(name.to_s, options).detect
+      end
 
-    def self.detect(name, options = {})
-      new(name.to_s, options).detect
+      def detect!(name, options = {})
+        detect(name, options) or raise LibraryNotFound, "Can't detect library `#{name}'."
+      end
     end
+
+    include BundlerSupport
 
     attr_reader :name, :options
 

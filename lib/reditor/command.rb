@@ -57,10 +57,36 @@ module Reditor
     end
 
     def detect_exec(name, options = {}, &block)
-      path = LibraryLocator.detect(name, options)
+      path = LibraryLocator.detect!(name, options)
 
-      return choose_exec name, options, &block unless path
+      do_exec path, &block
+    rescue LibraryNotFound => e
+      say e.message
 
+      choose_exec name, options, &block
+    end
+
+    def choose_exec(name, options = {}, &block)
+      names = LibrarySearchQuery.search(name, options)
+
+      names.each.with_index do |name, i|
+        say "[#{i}] #{name}"
+      end
+
+      exit_silently unless num = ask('Choose number of library [0]>')
+
+      if name = names[num.to_i]
+        do_exec LibraryLocator.detect!(name, options), &block
+      else
+        abort "#{num} isn't included in the list."
+      end
+    rescue LibraryNotFound => e
+      abort e.message
+    rescue Interrupt
+      exit_silently
+    end
+
+    def do_exec(path, &block)
       dir, file =
         if path.file?
           [path.dirname.to_path, path.basename.to_path]
@@ -71,21 +97,6 @@ module Reditor
       block.call dir, file
     end
 
-    def choose_exec(name, options = {}, &block)
-      names = LibrarySearchQuery.search(name, options)
-
-      names.each.with_index do |name, i|
-        say "[#{i}] #{name}"
-      end
-      print 'Choose number of library [0]> '
-
-      abort_reditor unless num = $stdin.gets
-
-      detect_exec names[num.to_i], options, &block
-    rescue Interrupt
-      abort_reditor
-    end
-
     def editor_command
       ENV['EDITOR'] or raise '$EDITOR is not provided.'
     end
@@ -94,7 +105,7 @@ module Reditor
       ENV['SHELL'] or raise '$SHELL is not provided.'
     end
 
-    def abort_reditor
+    def exit_silently
       puts
 
       exit
