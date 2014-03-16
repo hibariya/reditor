@@ -23,7 +23,7 @@ module Reditor
 
     def search(limit = options[:limit])
       candidates.sort_by {|name|
-        [*scores_with_match(name), *scores_with_distance(name), name]
+        [*match_scores(name), *distance_scores(name), name]
       }.take(limit)
     end
 
@@ -37,7 +37,7 @@ module Reditor
 
     private
 
-    def scores_with_match(name)
+    def match_scores(name)
       words         = name.split(/-_/)
       half_count    = words.grep(half_pattern).count
       partial_count = words.grep(partial_pattern).count
@@ -45,7 +45,7 @@ module Reditor
       [-half_count, -partial_count]
     end
 
-    def scores_with_distance(name)
+    def distance_scores(name)
       [Hotwater.damerau_levenshtein_distance(query, name)]
     end
 
