@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Reditor::LibrarySearchQuery do
   describe '.search(query, limit)' do
     before do
-      Reditor::LibrarySearchQuery.any_instance.stub(:available_libraries) {
+      Reditor::LibrarySearchQuery.any_instance.stub(:candidates) {
         %w(
           rails_admin
           railtie

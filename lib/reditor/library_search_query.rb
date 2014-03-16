@@ -22,16 +22,16 @@ module Reditor
     end
 
     def search(limit = options[:limit])
-      available_libraries.sort_by {|name|
+      candidates.sort_by {|name|
         [*scores_with_match(name), *scores_with_distance(name), name]
       }.take(limit)
     end
 
-    def available_libraries
-      @available_libraries ||= (
-        availables_from_loadpath +
-        availables_from_gem      +
-        availables_from_bundler
+    def candidates
+      @candidates ||= (
+        candidates_from_loadpath +
+        candidates_from_gem      +
+        candidates_from_bundler
       ).uniq
     end
 
@@ -49,22 +49,22 @@ module Reditor
       [Hotwater.damerau_levenshtein_distance(query, name)]
     end
 
-    def availables_from_bundler
+    def candidates_from_bundler
       return [] if options[:global]
 
       bundler_specs.map(&:name)
     end
 
-    def availables_from_gem
+    def candidates_from_gem
       Gem::Specification.map(&:name)
     rescue Gem::LoadError
       []
     end
 
-    def availables_from_loadpath
-      $LOAD_PATH.each_with_object([]) {|path, availables|
+    def candidates_from_loadpath
+      $LOAD_PATH.each_with_object([]) {|path, memo|
         Pathname(File.expand_path(path)).entries.each do |entry|
-          availables << entry.basename('.rb').to_s if entry.extname == '.rb'
+          memo << entry.basename('.rb').to_s if entry.extname == '.rb'
         end
       }
     end
