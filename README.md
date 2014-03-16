@@ -2,9 +2,9 @@
 
 Reditor provides `reditor` command.
 
-This command detect and open a library from $LOAD_PATH or rubygems.
+This command detect and open a library from `$LOAD_PATH` or rubygems.
 
-reditor requires the EDITOR variable.
+reditor requires the `$EDITOR` variable.
 
 ## Installation
 
@@ -26,7 +26,7 @@ reditor requires the EDITOR variable.
   $ reditor railties
 ```
 
-### Open a library with shell
+### Open a library by $SHELL
 
 ```
   $ reditor sh railties

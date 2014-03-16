@@ -19,7 +19,7 @@ module Reditor
         '--version' => :version,
         '--help'    => :help
 
-    desc :open, 'Open the library'
+    desc 'open [NAME]', 'Detect and open a library'
     method_options global: false
     def open(name)
       detect_exec name, global: options[:global] do |dir, file|
@@ -32,7 +32,7 @@ module Reditor
       end
     end
 
-    desc :sh, 'Open a shell and move to the library'
+    desc 'sh [NAME]', 'Detect and open a library by $SHELL'
     method_options global: false
     def sh(name)
       detect_exec name, global: options[:global] do |dir, _|
