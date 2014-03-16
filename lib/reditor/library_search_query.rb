@@ -10,20 +10,20 @@ module Reditor
     end
 
     attr_reader :query, :options
-    attr_reader :substr_pattern, :partial_pattern
+    attr_reader :half_pattern, :partial_pattern
 
     def initialize(query, options = {})
       @query   = query.to_s
       @options = {limit: 20, global: false}.merge(options)
 
       quoted = Regexp.quote(query)
-      @substr_pattern  = /^#{quoted}|#{quoted}$/i
+      @half_pattern    = /^#{quoted}|#{quoted}$/i
       @partial_pattern = /#{quoted}/i
     end
 
     def search(limit = options[:limit])
       available_libraries.sort_by {|name|
-        indexes_with_match(name) + indexes_with_distance(name)
+        [*scores_with_match(name), *scores_with_distance(name), name]
       }.take(limit)
     end
 
@@ -37,15 +37,15 @@ module Reditor
 
     private
 
-    def indexes_with_match(name)
+    def scores_with_match(name)
       words         = name.split(/-_/)
-      substr_count  = words.grep(substr_pattern).count
+      half_count    = words.grep(half_pattern).count
       partial_count = words.grep(partial_pattern).count
 
-      [-substr_count, -partial_count]
+      [-half_count, -partial_count]
     end
 
-    def indexes_with_distance(name)
+    def scores_with_distance(name)
       [Hotwater.damerau_levenshtein_distance(query, name)]
     end
 
