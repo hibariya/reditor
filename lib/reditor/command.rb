@@ -19,9 +19,8 @@ module Reditor
         '--version' => :version,
         '--help'    => :help
 
-    class_options global: false, desc: 'Detect global libraries only'
-
     desc :open, 'Open the library'
+    method_options global: false
     def open(name)
       detect_exec name, global: options[:global] do |dir, file|
         say "Moving to #{dir}", :green
@@ -34,6 +33,7 @@ module Reditor
     end
 
     desc :sh, 'Open a shell and move to the library'
+    method_options global: false
     def sh(name)
       detect_exec name, global: options[:global] do |dir, _|
         say "Moving to #{dir}", :green
@@ -51,9 +51,9 @@ module Reditor
     private
 
     def method_missing(name, *args, &block)
-      super if Command.restarted
+      return super if Command.restarted
 
-      Command.restart ['open', name.to_s, *args]
+      Command.restart ['open', name, *args]
     end
 
     def detect_exec(name, options = {}, &block)
