@@ -9,4 +9,7 @@ PROJECT_ROOT = Pathname.new(__FILE__).dirname.join('..').realpath
 RSpec.configure do |config|
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
+  config.expect_with :rspec do |c|
+    c.syntax = :should
+  end
 end

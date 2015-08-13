@@ -22,7 +22,7 @@ describe 'reditor command' do
     }
   end
 
-  let(:thor_in_global_gems)     { /thor-0\.18\.*/ }
+  let(:thor_in_global_gems)     { /thor-0\.19\.*/ }
   let(:thor_in_bundler_project) { /thor-0\.14\.6/ }
 
   before :all do

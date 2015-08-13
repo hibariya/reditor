@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Reditor::LibrarySearchQuery do
   describe '.search(query, limit)' do
     before do
-      Reditor::LibrarySearchQuery.any_instance.stub(:candidates) {
+      allow_any_instance_of(Reditor::LibrarySearchQuery).to receive(:candidates).and_return(
         %w(
           rails_admin
           railtie
@@ -15,7 +15,7 @@ describe Reditor::LibrarySearchQuery do
           itwho
           csv
         )
-      }
+      )
     end
 
     describe 'rails' do
