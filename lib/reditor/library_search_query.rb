@@ -4,6 +4,7 @@ require 'hotwater'
 module Reditor
   class LibrarySearchQuery
     include BundlerSupport
+    include StdlibSupport
 
     def self.search(query, options = {})
       new(query, options).search
@@ -31,7 +32,8 @@ module Reditor
       @candidates ||= (
         candidates_from_loadpath +
         candidates_from_gem      +
-        candidates_from_bundler
+        candidates_from_bundler  +
+        candidates_from_stdlib
       ).uniq
     end
 
@@ -49,6 +51,10 @@ module Reditor
       [Hotwater.damerau_levenshtein_distance(query, name)]
     end
 
+    def candidates_from_stdlib
+      stdlib_specs.map(&:name)
+    end
+
     def candidates_from_bundler
       return [] if options[:global]
 
@@ -63,8 +69,12 @@ module Reditor
 
     def candidates_from_loadpath
       $LOAD_PATH.each_with_object([]) {|path, memo|
-        Pathname(File.expand_path(path)).entries.each do |entry|
-          memo << entry.basename('.rb').to_s if entry.extname == '.rb'
+        begin
+          Pathname(File.expand_path(path)).entries.each do |entry|
+            memo << entry.basename('.rb').to_s if entry.extname == '.rb'
+          end
+        rescue Errno::ENOENT
+          # maybe load path is invalid
         end
       }
     end

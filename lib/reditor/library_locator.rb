@@ -14,6 +14,7 @@ module Reditor
     end
 
     include BundlerSupport
+    include StdlibSupport
 
     attr_reader :name, :options
 
@@ -23,7 +24,13 @@ module Reditor
     end
 
     def detect
-      detect_from_bundler || detect_from_loadpath || detect_from_gem
+      detect_from_stdlib || detect_from_bundler || detect_from_loadpath || detect_from_gem
+    end
+
+    def detect_from_stdlib
+      return nil unless spec = stdlib_specs.find {|spec| spec.name == name }
+
+      Pathname(spec.path)
     end
 
     def detect_from_bundler
