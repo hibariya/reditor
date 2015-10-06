@@ -41,7 +41,7 @@ describe 'reditor command' do
     context 'Incorrect name library in non-bundler broject' do
       subject { capture_reditor('cvs', on: 'blank_project') }
 
-      it { should match /\[0\] csv/ }
+      it { should match /csv\s+/ }
     end
 
     context 'Rubygems library in non-bundler project' do
@@ -78,17 +78,15 @@ describe 'reditor command' do
     context 'with incorrect name' do
       subject { capture_reditor('rb') }
 
-      it { should match /\[\d+\]\sirb$/ }
-      it { should match /\[\d+\]\serb$/ }
-      it { should match /\[\d+\]\sdrb$/ }
-      it { should match /Choose number of library/ }
+      it { should match /irb\s+/ }
+      it { should match /erb\s+/ }
+      it { should match /drb\s+/ }
     end
 
     context 'with incorrect name and --global option' do
       subject { capture_reditor('tho', on: 'bundler_project', global: true) }
 
-      it { should match /\[\d+\]\sthor$/ }
-      it { should match /Choose number of library/ }
+      it { should match /thor\s+/ }
     end
   end
 end
