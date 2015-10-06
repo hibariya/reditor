@@ -63,8 +63,12 @@ module Reditor
 
     def candidates_from_loadpath
       $LOAD_PATH.each_with_object([]) {|path, memo|
-        Pathname(File.expand_path(path)).entries.each do |entry|
-          memo << entry.basename('.rb').to_s if entry.extname == '.rb'
+        begin
+          Pathname(File.expand_path(path)).entries.each do |entry|
+              memo << entry.basename('.rb').to_s if entry.extname == '.rb'
+          end
+        rescue Errno::ENOENT
+          # maybe load path is invalid
         end
       }
     end
