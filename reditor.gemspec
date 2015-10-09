@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.version       = Reditor::VERSION
 
   gem.add_runtime_dependency 'hotwater', '~> 0.1.2'
+  gem.add_runtime_dependency 'pepin',    '~> 0.1.1'
   gem.add_runtime_dependency 'thor',     '~> 0.19.1'
 
   gem.add_development_dependency 'rake', '~> 10.4.2'

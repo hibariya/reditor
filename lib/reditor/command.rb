@@ -1,6 +1,7 @@
 # coding: utf-8
 
 require 'thor'
+require 'pepin'
 
 module Reditor
   class Command < Thor
@@ -67,13 +68,7 @@ module Reditor
     def choose_exec(name, options = {}, &block)
       names = LibrarySearchQuery.search(name, options)
 
-      names.each.with_index do |name, i|
-        say "[#{i}] #{name}"
-      end
-
-      exit_silently unless num = ask('Choose number of library [0]>')
-
-      if name = names[num.to_i]
+      if name = Pepin.search(names)
         do_exec LibraryLocator.detect!(name, options), &block
       else
         abort "#{num} isn't included in the list."
